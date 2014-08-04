@@ -1,0 +1,6 @@
+[submodule "rebol"]
+	path = rebol
+	url = https://github.com/rebol/rebol
+[submodule "redis"]
+	path = redis
+	url = https://github.com/antirez/redis
