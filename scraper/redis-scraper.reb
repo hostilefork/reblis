@@ -89,7 +89,7 @@ make-command-table: does [
             #"s" not-scriptable
             {command not allowed in scripts.}
         ] [
-            #"r" non-deterministic
+            #"R" non-deterministic
             {random command. Command is not deterministic, that is, the same command
             with the same arguments, with the same key space, may have different
             results. For instance SPOP and RANDOMKEY are two random commands.}
@@ -658,10 +658,10 @@ make-command-table: does [
                     name: "key"
                     type: "key"
                 ] [
-                    name: "min"
+                    name: "max"
                     type: "string"
                 ] [
-                    name: "max"
+                    name: "min"
                     type: "string"
                 ] [
                     command: "LIMIT"
@@ -907,7 +907,7 @@ make-command-table: does [
         flag-string: get-row-field table-row 'sflags
         flag-block: copy []
         foreach meaning flag-meanings [
-            if find flag-string (first meaning) [
+            if find/case flag-string (first meaning) [
                 append flag-block (second meaning)
             ]
         ]
@@ -942,4 +942,4 @@ make-command-table: does [
     return mold/only commands-block
 ]
 
-write %redis-commands.ren make-command-table
+write %../redis-commands.ren make-command-table
