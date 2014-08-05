@@ -7,7 +7,7 @@ APPEND: [
         key [string! binary!] "key!"
         value [string!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 AUTH: [
     summary: "Authenticate to the server"
@@ -16,26 +16,21 @@ AUTH: [
     parameters: [
         password [string!]
     ]
-    flags: [read-only force-replicate not-scriptable non-deterministic sort-output loading-okay stale-data-okay
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only not-scriptable loading-okay stale-data-okay fast-command]
 ]
 BGREWRITEAOF: [
     summary: "Asynchronously rewrite the append-only file"
     since: 1.0.0
     group: 'server
     parameters: []
-    flags: [read-only admin non-deterministic]
+    flags: [read-only admin]
 ]
 BGSAVE: [
     summary: "Asynchronously save the dataset to disk"
     since: 1.0.0
     group: 'server
     parameters: []
-    flags: [read-only admin non-deterministic]
+    flags: [read-only admin]
 ]
 BITCOUNT: [
     summary: "Count set bits in a string"
@@ -46,7 +41,7 @@ BITCOUNT: [
         key [string! binary!] "key!"
         /range start [integer!] end [integer!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 BITOP: [
     summary: "Perform bitwise operations between strings"
@@ -58,7 +53,7 @@ BITOP: [
         destkey [string! binary!] "key!"
         key [string! binary! block!] "key!"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 BITPOS: [
     summary: "Find first bit set or clear in a string"
@@ -71,7 +66,7 @@ BITPOS: [
         /start start-value [integer!]
         /end end-value [integer!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 BLPOP: [
     summary: {Remove and get the first element in a list  or block until one is available}
@@ -82,7 +77,7 @@ BLPOP: [
         key [string! binary! block!] "key!"
         timeout [integer!]
     ]
-    flags: [write not-scriptable sort-output]
+    flags: [write not-scriptable]
 ]
 BRPOP: [
     summary: {Remove and get the last element in a list  or block until one is available}
@@ -93,7 +88,7 @@ BRPOP: [
         key [string! binary! block!] "key!"
         timeout [integer!]
     ]
-    flags: [write not-scriptable sort-output]
+    flags: [write not-scriptable]
 ]
 BRPOPLPUSH: [
     summary: {Pop a value from a list  push it to another list and return it; or block until one is available}
@@ -105,7 +100,7 @@ BRPOPLPUSH: [
         destination [string! binary!] "key!"
         timeout [integer!]
     ]
-    flags: [write may-allocate not-scriptable sort-output no-monitor-propagate]
+    flags: [write may-allocate not-scriptable]
 ]
 CLIENT-GETNAME: [
     summary: "Get the current connection name"
@@ -113,7 +108,7 @@ CLIENT-GETNAME: [
     since: 2.6.9
     group: 'server
     parameters: []
-    flags: [read-only admin non-deterministic]
+    flags: [read-only admin]
 ]
 CLIENT-KILL: [
     summary: "Kill the connection of a client"
@@ -127,7 +122,7 @@ CLIENT-KILL: [
         /addr ip+port [string!]
         /skipme yes-no [string!]
     ]
-    flags: [read-only admin non-deterministic]
+    flags: [read-only admin]
 ]
 CLIENT-LIST: [
     summary: "Get the list of client connections"
@@ -135,7 +130,7 @@ CLIENT-LIST: [
     since: 2.4.0
     group: 'server
     parameters: []
-    flags: [read-only admin non-deterministic]
+    flags: [read-only admin]
 ]
 CLIENT-PAUSE: [
     summary: {Stop processing commands from clients for some time}
@@ -145,7 +140,7 @@ CLIENT-PAUSE: [
     parameters: [
         timeout [integer!]
     ]
-    flags: [read-only admin non-deterministic]
+    flags: [read-only admin]
 ]
 CLIENT-SETNAME: [
     summary: "Set the current connection name"
@@ -155,7 +150,7 @@ CLIENT-SETNAME: [
     parameters: [
         connection-name [string!]
     ]
-    flags: [read-only admin non-deterministic]
+    flags: [read-only admin]
 ]
 CLUSTER-SLOTS: [
     summary: "Get array of Cluster slot to node mappings"
@@ -177,7 +172,7 @@ COMMAND-COUNT: [
     since: 2.8.13
     group: 'server
     parameters: []
-    flags: [read-only non-deterministic loading-okay stale-data-okay]
+    flags: [read-only loading-okay stale-data-okay]
 ]
 COMMAND-GETKEYS: [
     summary: "Extract keys given a full Redis command"
@@ -185,7 +180,7 @@ COMMAND-GETKEYS: [
     since: 2.8.13
     group: 'server
     parameters: []
-    flags: [read-only non-deterministic loading-okay stale-data-okay]
+    flags: [read-only loading-okay stale-data-okay]
 ]
 COMMAND-INFO: [
     summary: "Get array of specific Redis command details"
@@ -195,7 +190,7 @@ COMMAND-INFO: [
     parameters: [
         command-name [string! block!]
     ]
-    flags: [read-only non-deterministic loading-okay stale-data-okay]
+    flags: [read-only loading-okay stale-data-okay]
 ]
 CONFIG-GET: [
     summary: "Get the value of a configuration parameter"
@@ -204,7 +199,7 @@ CONFIG-GET: [
     parameters: [
         parameter [string!]
     ]
-    flags: [read-only admin non-deterministic stale-data-okay]
+    flags: [read-only admin stale-data-okay]
 ]
 CONFIG-RESETSTAT: [
     summary: "Reset the stats returned by INFO"
@@ -212,14 +207,14 @@ CONFIG-RESETSTAT: [
     since: 2.0.0
     group: 'server
     parameters: []
-    flags: [read-only admin non-deterministic stale-data-okay]
+    flags: [read-only admin stale-data-okay]
 ]
 CONFIG-REWRITE: [
     summary: {Rewrite the configuration file with the in memory configuration}
     since: 2.8.0
     group: 'server
     parameters: []
-    flags: [read-only admin non-deterministic stale-data-okay]
+    flags: [read-only admin stale-data-okay]
 ]
 CONFIG-SET: [
     summary: "Set a configuration parameter to the given value"
@@ -229,19 +224,14 @@ CONFIG-SET: [
         parameter [string!]
         value [string!]
     ]
-    flags: [read-only admin non-deterministic stale-data-okay]
+    flags: [read-only admin stale-data-okay]
 ]
 DBSIZE: [
     summary: "Return the number of keys in the selected database"
     since: 1.0.0
     group: 'server
     parameters: []
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 DEBUG-OBJECT: [
     summary: "Get debugging information about a key"
@@ -250,14 +240,14 @@ DEBUG-OBJECT: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [admin not-scriptable sort-output]
+    flags: [admin not-scriptable]
 ]
 DEBUG-SEGFAULT: [
     summary: "Make the server crash"
     since: 1.0.0
     group: 'server
     parameters: []
-    flags: [admin not-scriptable sort-output]
+    flags: [admin not-scriptable]
 ]
 DECR: [
     summary: "Decrement the integer value of a key by one"
@@ -267,12 +257,7 @@ DECR: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 DECRBY: [
     summary: {Decrement the integer value of a key by the given number}
@@ -283,12 +268,7 @@ DECRBY: [
         key [string! binary!] "key!"
         decrement [integer!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 DEL: [
     summary: "Delete a key"
@@ -305,12 +285,7 @@ DISCARD: [
     since: 2.0.0
     group: 'transactions
     parameters: []
-    flags: [read-only force-replicate not-scriptable non-deterministic sort-output
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only not-scriptable fast-command]
 ]
 DUMP: [
     summary: {Return a serialized version of the value stored at the specified key.}
@@ -320,7 +295,7 @@ DUMP: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only admin non-deterministic]
+    flags: [read-only admin]
 ]
 ECHO: [
     summary: "Echo the given string"
@@ -329,12 +304,7 @@ ECHO: [
     parameters: [
         message [string!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 EVAL: [
     summary: "Execute a Lua script server side"
@@ -347,7 +317,7 @@ EVAL: [
         key [string! binary! block!] "key!"
         arg [string! block!]
     ]
-    flags: [not-scriptable sort-output]
+    flags: [not-scriptable]
 ]
 EVALSHA: [
     summary: "Execute a Lua script server side"
@@ -360,14 +330,14 @@ EVALSHA: [
         key [string! binary! block!] "key!"
         arg [string! block!]
     ]
-    flags: [not-scriptable sort-output]
+    flags: [not-scriptable]
 ]
 EXEC: [
     summary: "Execute all commands issued after MULTI"
     since: 1.2.0
     group: 'transactions
     parameters: []
-    flags: [may-allocate not-scriptable sort-output no-monitor-propagate]
+    flags: [not-scriptable no-monitor-propagate]
 ]
 EXISTS: [
     summary: "Determine if a key exists"
@@ -377,12 +347,7 @@ EXISTS: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 EXPIRE: [
     summary: "Set a key's time to live in seconds"
@@ -393,12 +358,7 @@ EXPIRE: [
         key [string! binary!] "key!"
         seconds [integer!]
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 EXPIREAT: [
     summary: "Set the expiration for a key as a UNIX timestamp"
@@ -409,12 +369,7 @@ EXPIREAT: [
         key [string! binary!] "key!"
         timestamp [time!]
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 FLUSHALL: [
     summary: "Remove all keys from all databases"
@@ -438,12 +393,7 @@ GET: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 GETBIT: [
     summary: {Returns the bit value at offset in the string value stored at key}
@@ -454,12 +404,7 @@ GETBIT: [
         key [string! binary!] "key!"
         offset [integer!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 GETRANGE: [
     summary: "Get a substring of the string stored at a key"
@@ -471,7 +416,7 @@ GETRANGE: [
         start [integer!]
         end [integer!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 GETSET: [
     summary: {Set the string value of a key and return its old value}
@@ -482,7 +427,7 @@ GETSET: [
         key [string! binary!] "key!"
         value [string!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 HDEL: [
     summary: "Delete one or more hash fields"
@@ -493,12 +438,7 @@ HDEL: [
         key [string! binary!] "key!"
         field [string! block!]
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 HEXISTS: [
     summary: "Determine if a hash field exists"
@@ -509,12 +449,7 @@ HEXISTS: [
         key [string! binary!] "key!"
         field [string!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 HGET: [
     summary: "Get the value of a hash field"
@@ -525,12 +460,7 @@ HGET: [
         key [string! binary!] "key!"
         field [string!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 HGETALL: [
     summary: "Get all the fields and values in a hash"
@@ -540,7 +470,7 @@ HGETALL: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 HINCRBY: [
     summary: {Increment the integer value of a hash field by the given number}
@@ -552,12 +482,7 @@ HINCRBY: [
         field [string!]
         increment [integer!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 HINCRBYFLOAT: [
     summary: {Increment the float value of a hash field by the given amount}
@@ -569,12 +494,7 @@ HINCRBYFLOAT: [
         field [string!]
         increment [decimal!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 HKEYS: [
     summary: "Get all the fields in a hash"
@@ -584,7 +504,7 @@ HKEYS: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only not-scriptable non-deterministic sort-output]
+    flags: [read-only sort-output]
 ]
 HLEN: [
     summary: "Get the number of fields in a hash"
@@ -594,12 +514,7 @@ HLEN: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 HMGET: [
     summary: "Get the values of all the given hash fields"
@@ -610,7 +525,7 @@ HMGET: [
         key [string! binary!] "key!"
         field [string! block!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 HMSET: [
     summary: "Set multiple hash fields to multiple values"
@@ -621,7 +536,7 @@ HMSET: [
         key [string! binary!] "key!"
         field-value-pairs [block!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 HSCAN: [
     summary: {Incrementally iterate hash fields and associated values}
@@ -646,12 +561,7 @@ HSET: [
         field [string!]
         value [string!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 HSETNX: [
     summary: {Set the value of a hash field  only if the field does not exist}
@@ -663,12 +573,7 @@ HSETNX: [
         field [string!]
         value [string!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 HVALS: [
     summary: "Get all the values in a hash"
@@ -678,7 +583,7 @@ HVALS: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only not-scriptable non-deterministic sort-output]
+    flags: [read-only sort-output]
 ]
 INCR: [
     summary: "Increment the integer value of a key by one"
@@ -688,12 +593,7 @@ INCR: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 INCRBY: [
     summary: {Increment the integer value of a key by the given amount}
@@ -704,12 +604,7 @@ INCRBY: [
         key [string! binary!] "key!"
         increment [integer!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 INCRBYFLOAT: [
     summary: {Increment the float value of a key by the given amount}
@@ -720,12 +615,7 @@ INCRBYFLOAT: [
         key [string! binary!] "key!"
         increment [decimal!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 INFO: [
     summary: "Get information and statistics about the server"
@@ -734,7 +624,7 @@ INFO: [
     parameters: [
         /section section-value [string!]
     ]
-    flags: [read-only non-deterministic loading-okay stale-data-okay]
+    flags: [read-only loading-okay stale-data-okay]
 ]
 KEYS: [
     summary: "Find all keys matching the given pattern"
@@ -744,19 +634,14 @@ KEYS: [
     parameters: [
         pattern [string!] "pattern"
     ]
-    flags: [read-only not-scriptable non-deterministic sort-output]
+    flags: [read-only sort-output]
 ]
 LASTSAVE: [
     summary: {Get the UNIX time stamp of the last successful save to disk}
     since: 1.0.0
     group: 'server
     parameters: []
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only non-deterministic fast-command]
 ]
 LATENCY: [
     summary: "Internal, undocumented."
@@ -764,7 +649,7 @@ LATENCY: [
     since: 3.0.0
     group: 'internal
     parameters: []
-    flags: [read-only admin not-scriptable non-deterministic sort-output loading-okay stale-data-okay]
+    flags: [read-only admin not-scriptable loading-okay stale-data-okay]
 ]
 LINDEX: [
     summary: "Get an element from a list by its index"
@@ -775,7 +660,7 @@ LINDEX: [
         key [string! binary!] "key!"
         index [integer!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 LINSERT: [
     summary: {Insert an element before or after another element in a list}
@@ -788,7 +673,7 @@ LINSERT: [
         pivot [string!]
         value [string!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 LLEN: [
     summary: "Get the length of a list"
@@ -798,12 +683,7 @@ LLEN: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 LPOP: [
     summary: "Remove and get the first element in a list"
@@ -813,12 +693,7 @@ LPOP: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 LPUSH: [
     summary: "Prepend one or multiple values to a list"
@@ -829,12 +704,7 @@ LPUSH: [
         key [string! binary!] "key!"
         value [string! block!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 LPUSHX: [
     summary: "Prepend a value to a list  only if the list exists"
@@ -845,12 +715,7 @@ LPUSHX: [
         key [string! binary!] "key!"
         value [string!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 LRANGE: [
     summary: "Get a range of elements from a list"
@@ -862,7 +727,7 @@ LRANGE: [
         start [integer!]
         stop [integer!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 LREM: [
     summary: "Remove elements from a list"
@@ -886,7 +751,7 @@ LSET: [
         index [integer!]
         value [string!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 LTRIM: [
     summary: "Trim a list to the specified range"
@@ -908,7 +773,7 @@ MGET: [
     parameters: [
         key [string! binary! block!] "key!"
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 MIGRATE: [
     summary: {Atomically transfer a key from a Redis instance to another one.}
@@ -929,7 +794,7 @@ MONITOR: [
     since: 1.0.0
     group: 'server
     parameters: []
-    flags: [read-only admin not-scriptable non-deterministic sort-output]
+    flags: [read-only admin not-scriptable]
 ]
 MOVE: [
     summary: "Move a key to another database"
@@ -940,12 +805,7 @@ MOVE: [
         key [string! binary!] "key!"
         db [integer!]
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 MSET: [
     summary: "Set multiple keys to multiple values"
@@ -955,7 +815,7 @@ MSET: [
     parameters: [
         key-value-pairs [block!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 MSETNX: [
     summary: {Set multiple keys to multiple values  only if none of the keys exist}
@@ -965,19 +825,14 @@ MSETNX: [
     parameters: [
         key-value-pairs [block!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 MULTI: [
     summary: "Mark the start of a transaction block"
     since: 1.2.0
     group: 'transactions
     parameters: []
-    flags: [read-only force-replicate not-scriptable non-deterministic sort-output
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only not-scriptable fast-command]
 ]
 OBJECT: [
     summary: "Inspect the internals of Redis objects"
@@ -988,7 +843,7 @@ OBJECT: [
         subcommand [string!]
         /arguments arguments-value [string! block!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 PERSIST: [
     summary: "Remove the expiration from a key"
@@ -998,12 +853,7 @@ PERSIST: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 PEXPIRE: [
     summary: "Set a key's time to live in milliseconds"
@@ -1014,12 +864,7 @@ PEXPIRE: [
         key [string! binary!] "key!"
         milliseconds [integer!]
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 PEXPIREAT: [
     summary: {Set the expiration for a key as a UNIX timestamp specified in milliseconds}
@@ -1030,12 +875,7 @@ PEXPIREAT: [
         key [string! binary!] "key!"
         milliseconds-timestamp [time!]
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 PFADD: [
     summary: {Adds the specified elements to the specified HyperLogLog.}
@@ -1046,12 +886,7 @@ PFADD: [
         key [string! binary!] "key!"
         element [string! block!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 PFCOUNT: [
     summary: {Return the approximated cardinality of the set(s) observed by the HyperLogLog at key(s).}
@@ -1080,7 +915,7 @@ PFMERGE: [
         destkey [string! binary!] "key!"
         sourcekey [string! binary! block!] "key!"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 PFSELFTEST: [
     summary: "Internal, undocumented."
@@ -1088,19 +923,14 @@ PFSELFTEST: [
     since: 3.0.0
     group: 'internal
     parameters: []
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 PING: [
     summary: "Ping the server"
     since: 1.0.0
     group: 'connection
     parameters: []
-    flags: [read-only force-replicate non-deterministic stale-data-okay
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only stale-data-okay fast-command]
 ]
 PSETEX: [
     summary: {Set the value and expiration in milliseconds of a key}
@@ -1112,7 +942,7 @@ PSETEX: [
         milliseconds [integer!]
         value [string!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 PSUBSCRIBE: [
     summary: {Listen for messages published to channels matching the given patterns}
@@ -1122,7 +952,7 @@ PSUBSCRIBE: [
     parameters: [
         pattern [string! block!] "pattern"
     ]
-    flags: [read-only pub-sub not-scriptable non-deterministic sort-output loading-okay stale-data-okay]
+    flags: [read-only pub-sub not-scriptable loading-okay stale-data-okay]
 ]
 PSYNC: [
     summary: "Internal command used for replication"
@@ -1130,7 +960,7 @@ PSYNC: [
     since: 3.0.0
     group: 'internal
     parameters: []
-    flags: [read-only admin not-scriptable non-deterministic sort-output]
+    flags: [read-only admin not-scriptable]
 ]
 PTTL: [
     summary: "Get the time to live for a key in milliseconds"
@@ -1140,12 +970,7 @@ PTTL: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 PUBLISH: [
     summary: "Post a message to a channel"
@@ -1156,12 +981,7 @@ PUBLISH: [
         channel [string!]
         message [string!]
     ]
-    flags: [read-only pub-sub force-replicate non-deterministic loading-okay stale-data-okay
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only pub-sub loading-okay stale-data-okay fast-command]
 ]
 PUBSUB: [
     summary: "Inspect the state of the Pub/Sub subsystem"
@@ -1182,7 +1002,7 @@ PUNSUBSCRIBE: [
     parameters: [
         /pattern pattern-value [string! block!] "pattern"
     ]
-    flags: [read-only pub-sub not-scriptable non-deterministic sort-output loading-okay stale-data-okay]
+    flags: [read-only pub-sub not-scriptable loading-okay stale-data-okay]
 ]
 QUIT: [
     summary: "Close the connection"
@@ -1204,12 +1024,7 @@ READONLY: [
     since: 3.0.0
     group: 'internal
     parameters: []
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 READWRITE: [
     summary: "Internal, undocumented."
@@ -1217,12 +1032,7 @@ READWRITE: [
     since: 3.0.0
     group: 'internal
     parameters: []
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 RENAME: [
     summary: "Rename a key"
@@ -1244,12 +1054,7 @@ RENAMENX: [
         key [string! binary!] "key!"
         newkey [string! binary!] "key!"
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 REPLCONF: [
     summary: "Internal replication functionality, undocumented"
@@ -1259,7 +1064,7 @@ REPLCONF: [
     parameters: [
         /listening-port port [integer!]
     ]
-    flags: [read-only admin not-scriptable non-deterministic sort-output loading-okay stale-data-okay]
+    flags: [read-only admin not-scriptable loading-okay stale-data-okay]
 ]
 RESTORE: [
     summary: {Create a key using the provided serialized value  previously obtained using DUMP.}
@@ -1271,7 +1076,7 @@ RESTORE: [
         ttl [integer!]
         serialized-value [string!]
     ]
-    flags: [write may-allocate admin no-monitor-propagate]
+    flags: [write may-allocate admin]
 ]
 RESTORE-ASKING: [
     summary: {Asking variant of create a key using the provided serialized value, previously obtained using DUMP.}
@@ -1283,17 +1088,14 @@ RESTORE-ASKING: [
         ttl [integer!]
         serialized-value [string!]
     ]
-    flags: [write may-allocate admin no-monitor-propagate
-        {Perform an implicit ASKING for this command, so the command will
-            be accepted in cluster mode if the slot is marked as 'importing'.}
-    ]
+    flags: [write may-allocate admin implicit-asking]
 ]
 ROLE: [
     summary: {Return the role of the instance in the context of replication}
     since: 2.8.12
     group: 'server
     parameters: []
-    flags: [admin not-scriptable sort-output loading-okay stale-data-okay]
+    flags: [admin not-scriptable loading-okay stale-data-okay]
 ]
 RPOP: [
     summary: "Remove and get the last element in a list"
@@ -1303,12 +1105,7 @@ RPOP: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 RPOPLPUSH: [
     summary: {Remove the last element in a list  append it to another list and return it}
@@ -1319,7 +1116,7 @@ RPOPLPUSH: [
         source [string! binary!] "key!"
         destination [string! binary!] "key!"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 RPUSH: [
     summary: "Append one or multiple values to a list"
@@ -1330,12 +1127,7 @@ RPUSH: [
         key [string! binary!] "key!"
         value [string! block!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 RPUSHX: [
     summary: "Append a value to a list  only if the list exists"
@@ -1346,12 +1138,7 @@ RPUSHX: [
         key [string! binary!] "key!"
         value [string!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 SADD: [
     summary: "Add one or more members to a set"
@@ -1362,19 +1149,14 @@ SADD: [
         key [string! binary!] "key!"
         member [string! block!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 SAVE: [
     summary: "Synchronously save the dataset to disk"
     since: 1.0.0
     group: 'server
     parameters: []
-    flags: [read-only admin not-scriptable non-deterministic sort-output]
+    flags: [read-only admin not-scriptable]
 ]
 SCAN: [
     summary: "Incrementally iterate the keys space"
@@ -1396,12 +1178,7 @@ SCARD: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 SCRIPT-EXISTS: [
     summary: "Check existence of scripts in the script cache."
@@ -1411,7 +1188,7 @@ SCRIPT-EXISTS: [
     parameters: [
         script [string! block!]
     ]
-    flags: [read-only admin not-scriptable non-deterministic sort-output]
+    flags: [read-only admin not-scriptable]
 ]
 SCRIPT-FLUSH: [
     summary: "Remove all the scripts from the script cache."
@@ -1419,7 +1196,7 @@ SCRIPT-FLUSH: [
     since: 2.6.0
     group: 'scripting
     parameters: []
-    flags: [read-only admin not-scriptable non-deterministic sort-output]
+    flags: [read-only admin not-scriptable]
 ]
 SCRIPT-KILL: [
     summary: "Kill the script currently in execution."
@@ -1427,7 +1204,7 @@ SCRIPT-KILL: [
     since: 2.6.0
     group: 'scripting
     parameters: []
-    flags: [read-only admin not-scriptable non-deterministic sort-output]
+    flags: [read-only admin not-scriptable]
 ]
 SCRIPT-LOAD: [
     summary: {Load the specified Lua script into the script cache.}
@@ -1437,7 +1214,7 @@ SCRIPT-LOAD: [
     parameters: [
         script [string!]
     ]
-    flags: [read-only admin not-scriptable non-deterministic sort-output]
+    flags: [read-only admin not-scriptable]
 ]
 SDIFF: [
     summary: "Subtract multiple sets"
@@ -1447,7 +1224,7 @@ SDIFF: [
     parameters: [
         key [string! binary! block!] "key!"
     ]
-    flags: [read-only not-scriptable non-deterministic sort-output]
+    flags: [read-only sort-output]
 ]
 SDIFFSTORE: [
     summary: {Subtract multiple sets and store the resulting set in a key}
@@ -1458,7 +1235,7 @@ SDIFFSTORE: [
         destination [string! binary!] "key!"
         key [string! binary! block!] "key!"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 SELECT: [
     summary: {Change the selected database for the current connection}
@@ -1467,12 +1244,7 @@ SELECT: [
     parameters: [
         index [integer!]
     ]
-    flags: [read-only force-replicate non-deterministic loading-okay
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only loading-okay fast-command]
 ]
 SET: [
     summary: "Set the string value of a key"
@@ -1486,7 +1258,7 @@ SET: [
         /px milliseconds [integer!]
         /condition condition-value [word!] "enum with choices: 'NX 'XX"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 SETBIT: [
     summary: {Sets or clears the bit at offset in the string value stored at key}
@@ -1498,7 +1270,7 @@ SETBIT: [
         offset [integer!]
         value [string!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 SETEX: [
     summary: "Set the value and expiration of a key"
@@ -1510,7 +1282,7 @@ SETEX: [
         seconds [integer!]
         value [string!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 SETNX: [
     summary: {Set the value of a key  only if the key does not exist}
@@ -1521,12 +1293,7 @@ SETNX: [
         key [string! binary!] "key!"
         value [string!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 SETRANGE: [
     summary: {Overwrite part of a string at key starting at the specified offset}
@@ -1538,14 +1305,14 @@ SETRANGE: [
         offset [integer!]
         value [string!]
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 SHUTDOWN: [
     summary: {Synchronously save the dataset to disk and then shut down the server}
     since: 1.0.0
     group: 'server
     parameters: [/nosave /save]
-    flags: [read-only admin non-deterministic loading-okay stale-data-okay]
+    flags: [read-only admin loading-okay stale-data-okay]
 ]
 SINTER: [
     summary: "Intersect multiple sets"
@@ -1555,7 +1322,7 @@ SINTER: [
     parameters: [
         key [string! binary! block!] "key!"
     ]
-    flags: [read-only not-scriptable non-deterministic sort-output]
+    flags: [read-only sort-output]
 ]
 SINTERSTORE: [
     summary: {Intersect multiple sets and store the resulting set in a key}
@@ -1566,7 +1333,7 @@ SINTERSTORE: [
         destination [string! binary!] "key!"
         key [string! binary! block!] "key!"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 SISMEMBER: [
     summary: "Determine if a given value is a member of a set"
@@ -1577,12 +1344,7 @@ SISMEMBER: [
         key [string! binary!] "key!"
         member [string!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 SLAVEOF: [
     summary: {Make the server a slave of another instance  or promote it as master}
@@ -1592,7 +1354,7 @@ SLAVEOF: [
         host [string!]
         port [string!]
     ]
-    flags: [admin not-scriptable sort-output stale-data-okay]
+    flags: [admin not-scriptable stale-data-okay]
 ]
 SLOWLOG: [
     summary: "Manages the Redis slow queries log"
@@ -1602,7 +1364,7 @@ SLOWLOG: [
         subcommand [string!]
         /argument argument-value [string!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 SMEMBERS: [
     summary: "Get all the members in a set"
@@ -1612,7 +1374,7 @@ SMEMBERS: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only not-scriptable non-deterministic sort-output]
+    flags: [read-only sort-output]
 ]
 SMOVE: [
     summary: "Move a member from one set to another"
@@ -1624,12 +1386,7 @@ SMOVE: [
         destination [string! binary!] "key!"
         member [string!]
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 SORT: [
     summary: "Sort the elements in a list  set or sorted set"
@@ -1644,7 +1401,7 @@ SORT: [
         /order order-value [word!] "enum with choices: 'ASC 'DESC" /alpha
         /store destination [string! binary!] "key!"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 SPOP: [
     summary: "Remove and return a random member from a set"
@@ -1654,12 +1411,7 @@ SPOP: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [write read-only force-replicate not-scriptable non-deterministic sort-output
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write not-scriptable non-deterministic fast-command]
 ]
 SRANDMEMBER: [
     summary: "Get one or multiple random members from a set"
@@ -1681,12 +1433,7 @@ SREM: [
         key [string! binary!] "key!"
         member [string! block!]
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 SSCAN: [
     summary: "Incrementally iterate Set elements"
@@ -1709,12 +1456,7 @@ STRLEN: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 SUBSCRIBE: [
     summary: {Listen for messages published to the given channels}
@@ -1724,7 +1466,7 @@ SUBSCRIBE: [
     parameters: [
         channel [string! block!]
     ]
-    flags: [read-only pub-sub not-scriptable non-deterministic sort-output loading-okay stale-data-okay]
+    flags: [read-only pub-sub not-scriptable loading-okay stale-data-okay]
 ]
 SUNION: [
     summary: "Add multiple sets"
@@ -1734,7 +1476,7 @@ SUNION: [
     parameters: [
         key [string! binary! block!] "key!"
     ]
-    flags: [read-only not-scriptable non-deterministic sort-output]
+    flags: [read-only sort-output]
 ]
 SUNIONSTORE: [
     summary: {Add multiple sets and store the resulting set in a key}
@@ -1745,14 +1487,14 @@ SUNIONSTORE: [
         destination [string! binary!] "key!"
         key [string! binary! block!] "key!"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 SYNC: [
     summary: "Internal command used for replication"
     since: 1.0.0
     group: 'server
     parameters: []
-    flags: [read-only admin not-scriptable non-deterministic sort-output]
+    flags: [read-only admin not-scriptable]
 ]
 TIME: [
     summary: "Return the current server time"
@@ -1760,12 +1502,7 @@ TIME: [
     since: 2.6.0
     group: 'server
     parameters: []
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only non-deterministic fast-command]
 ]
 TTL: [
     summary: "Get the time to live for a key"
@@ -1775,12 +1512,7 @@ TTL: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 TYPE: [
     summary: "Determine the type stored at key"
@@ -1790,12 +1522,7 @@ TYPE: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 UNSUBSCRIBE: [
     summary: {Stop listening for messages posted to the given channels}
@@ -1805,7 +1532,7 @@ UNSUBSCRIBE: [
     parameters: [
         /channel channel-value [string! block!]
     ]
-    flags: [read-only pub-sub not-scriptable non-deterministic sort-output loading-okay stale-data-okay]
+    flags: [read-only pub-sub not-scriptable loading-okay stale-data-okay]
 ]
 UNWATCH: [
     summary: "Forget about all watched keys"
@@ -1813,12 +1540,7 @@ UNWATCH: [
     since: 2.2.0
     group: 'transactions
     parameters: []
-    flags: [read-only force-replicate not-scriptable non-deterministic sort-output
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only not-scriptable fast-command]
 ]
 WAIT: [
     summary: "Internal, undocumented."
@@ -1826,7 +1548,7 @@ WAIT: [
     since: 3.0.0
     group: 'internal
     parameters: []
-    flags: [read-only not-scriptable non-deterministic sort-output]
+    flags: [read-only not-scriptable]
 ]
 WATCH: [
     summary: {Watch the given keys to determine execution of the MULTI/EXEC block}
@@ -1836,12 +1558,7 @@ WATCH: [
     parameters: [
         key [string! binary! block!] "key!"
     ]
-    flags: [read-only force-replicate not-scriptable non-deterministic sort-output
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only not-scriptable fast-command]
 ]
 ZADD: [
     summary: {Add one or more members to a sorted set  or update its score if it already exists}
@@ -1852,12 +1569,7 @@ ZADD: [
         key [string! binary!] "key!"
         scores-and-members [block!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 ZCARD: [
     summary: "Get the number of members in a sorted set"
@@ -1867,12 +1579,7 @@ ZCARD: [
     parameters: [
         key [string! binary!] "key!"
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 ZCOUNT: [
     summary: {Count the members in a sorted set with scores within the given values}
@@ -1884,12 +1591,7 @@ ZCOUNT: [
         min [decimal!]
         max [decimal!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 ZINCRBY: [
     summary: "Increment the score of a member in a sorted set"
@@ -1901,12 +1603,7 @@ ZINCRBY: [
         increment [integer!]
         member [string!]
     ]
-    flags: [write may-allocate force-replicate no-monitor-propagate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write may-allocate fast-command]
 ]
 ZINTERSTORE: [
     summary: {Intersect multiple sorted sets and store the resulting sorted set in a new key}
@@ -1920,7 +1617,7 @@ ZINTERSTORE: [
         /weights weight [integer! block!]
         /aggregate aggregate-value [word!] "enum with choices: 'SUM 'MIN 'MAX"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]
 ZLEXCOUNT: [
     summary: {Count the number of members in a sorted set between a given lexicographical range}
@@ -1932,12 +1629,7 @@ ZLEXCOUNT: [
         min [string!]
         max [string!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 ZRANGE: [
     summary: {Return a range of members in a sorted set  by index}
@@ -1949,7 +1641,7 @@ ZRANGE: [
         start [integer!]
         stop [integer!] /withscores
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 ZRANGEBYLEX: [
     summary: {Return a range of members in a sorted set  by lexicographical range}
@@ -1962,7 +1654,7 @@ ZRANGEBYLEX: [
         max [string!]
         /limit offset [integer!] count [integer!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 ZRANGEBYSCORE: [
     summary: {Return a range of members in a sorted set  by score}
@@ -1975,7 +1667,7 @@ ZRANGEBYSCORE: [
         max [decimal!] /withscores
         /limit offset [integer!] count [integer!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 ZRANK: [
     summary: "Determine the index of a member in a sorted set"
@@ -1986,12 +1678,7 @@ ZRANK: [
         key [string! binary!] "key!"
         member [string!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 ZREM: [
     summary: "Remove one or more members from a sorted set"
@@ -2002,12 +1689,7 @@ ZREM: [
         key [string! binary!] "key!"
         member [string! block!]
     ]
-    flags: [write force-replicate
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [write fast-command]
 ]
 ZREMRANGEBYLEX: [
     summary: {Remove all members in a sorted set between the given lexicographical range}
@@ -2055,7 +1737,7 @@ ZREVRANGE: [
         start [integer!]
         stop [integer!] /withscores
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 ZREVRANGEBYLEX: [
     summary: {Return a range of members in a sorted set, by lexicographical range, with the scores ordered from high to low.}
@@ -2064,11 +1746,11 @@ ZREVRANGEBYLEX: [
     group: 'sorted_set
     parameters: [
         key [string! binary!] "key!"
-        min [string!]
         max [string!]
+        min [string!]
         /limit offset [integer!] count [integer!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 ZREVRANGEBYSCORE: [
     summary: {Return a range of members in a sorted set  by score  with scores ordered from high to low}
@@ -2081,7 +1763,7 @@ ZREVRANGEBYSCORE: [
         min [decimal!] /withscores
         /limit offset [integer!] count [integer!]
     ]
-    flags: [read-only non-deterministic]
+    flags: [read-only]
 ]
 ZREVRANK: [
     summary: {Determine the index of a member in a sorted set  with scores ordered from high to low}
@@ -2092,12 +1774,7 @@ ZREVRANK: [
         key [string! binary!] "key!"
         member [string!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 ZSCAN: [
     summary: {Incrementally iterate sorted sets elements and associated scores}
@@ -2121,12 +1798,7 @@ ZSCORE: [
         key [string! binary!] "key!"
         member [string!]
     ]
-    flags: [read-only force-replicate non-deterministic
-        {Fast command: O(1) or O(log(N)) command that should never delay
-            its execution as long as the kernel scheduler is giving us time.
-            Note that commands that may trigger a DEL as a side effect (like
-            SET) are not fast commands.}
-    ]
+    flags: [read-only fast-command]
 ]
 ZUNIONSTORE: [
     summary: {Add multiple sorted sets and store the resulting sorted set in a new key}
@@ -2140,5 +1812,5 @@ ZUNIONSTORE: [
         /weights weight [integer! block!]
         /aggregate aggregate-value [word!] "enum with choices: 'SUM 'MIN 'MAX"
     ]
-    flags: [write may-allocate no-monitor-propagate]
+    flags: [write may-allocate]
 ]

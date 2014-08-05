@@ -109,11 +109,11 @@ make-command-table: does [
             #"M" no-monitor-propagate
             {Do not automatically propagate the command on MONITOR.}
         ] [
-            #"k"
+            #"k" implicit-asking
             {Perform an implicit ASKING for this command, so the command will
             be accepted in cluster mode if the slot is marked as 'importing'.}
         ] [
-            #"F"
+            #"F" fast-command
             {Fast command: O(1) or O(log(N)) command that should never delay
             its execution as long as the kernel scheduler is giving us time.
             Note that commands that may trigger a DEL as a side effect (like
